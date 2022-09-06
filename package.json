@@ -25,6 +25,7 @@
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-import": "^2.26.0",
 		"eslint-plugin-prettier": "^4.2.1",
+		"filenamify": "4",
 		"fs-extra": "^10.1.0",
 		"got-cjs": "^12.3.1",
 		"husky": "^8.0.1",

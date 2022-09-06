@@ -1,14 +1,22 @@
 import { brengApi } from "@breng/brengApi"
 import { SearchResponse } from "@breng/types/search"
 
+import { createCacher } from "@utils/createCacher"
+
+const cache = createCacher<SearchResponse>("search")
+
 export const search = async (query: string): Promise<SearchResponse> => {
-	const response: SearchResponse = await brengApi
-		.get<SearchResponse>({
-			url: "travelplanner/geo/search",
-			searchParams: {
-				q: query,
-			},
-		})
-		.json()
-	return response
+	if (await cache.has(query)) {
+		return await cache.get(query)
+	}
+
+	const response = await brengApi.get<SearchResponse>({
+		url: "travelplanner/geo/search",
+		searchParams: {
+			q: query,
+		},
+	})
+
+	await cache.set(query, response.body)
+	return response.body
 }

@@ -1,3 +1,5 @@
+import { GeneralResponse } from "@breng/types/general"
+
 type TransitSearchResultType = "busStation" | "railStation" | "onstreetBus"
 type GeneralSearchResultType = "place" | "landuse" | "highway"
 
@@ -21,10 +23,7 @@ export interface GeneralSearchResult extends GenericSearchResult {
 	detailedType?: string
 }
 
-export interface SearchResponse {
-	result: {
-		transit: TransitSearchResult[]
-		general: GeneralSearchResult[]
-	}
-	statusCode: number
-}
+export type SearchResponse = GeneralResponse<{
+	transit: TransitSearchResult[]
+	general: GeneralSearchResult[]
+}>
