@@ -17,6 +17,5 @@ export const search = async (query: string): Promise<SearchResponse> => {
 		},
 	})
 
-	await cache.set(query, response.body)
-	return response.body
+	return await cache.set(query, response.body)
 }

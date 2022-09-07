@@ -5,7 +5,7 @@ import { join } from "path"
 interface Cacher<T> {
 	has: (key: string) => Promise<boolean>
 	get: (key: string) => Promise<T>
-	set: (key: string, value: T) => Promise<void>
+	set: (key: string, value: T) => Promise<T>
 }
 
 export const createCacher = <T>(identifier: string): Cacher<T> => {
@@ -20,8 +20,9 @@ export const createCacher = <T>(identifier: string): Cacher<T> => {
 		get: async (key: string): Promise<T> => {
 			return await readJSON(getCacheFileName(key), "utf-8")
 		},
-		set: async (key: string, value: T): Promise<void> => {
+		set: async (key: string, value: T): Promise<T> => {
 			await outputJSON(getCacheFileName(key), value)
+			return value
 		},
 	}
 }

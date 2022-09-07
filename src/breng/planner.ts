@@ -45,7 +45,5 @@ export const planner = async (
 		},
 	})
 
-	await cache.set(slug, response.body)
-
-	return response.body
+	return await cache.set(slug, response.body)
 }
