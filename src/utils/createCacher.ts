@@ -1,28 +1,47 @@
-import filenamify from "filenamify"
 import { outputJSON, pathExists, readJSON } from "fs-extra"
+import { Got, OptionsOfJSONResponseBody } from "got-cjs"
 import { join } from "path"
 
-interface Cacher<T> {
-	has: (key: string) => Promise<boolean>
-	get: (key: string) => Promise<T>
-	set: (key: string, value: T) => Promise<T>
-}
+import { createHash } from "@utils/createHash"
+import { http } from "@utils/http"
 
-export const createCacher = <T>(identifier: string): Cacher<T> => {
-	const getCacheFileName = (key: string): string =>
-		join(process.cwd(), "cache", identifier, filenamify(key))
+export class Cacher<T> {
+	identifier: string
+	got: Got
 
-	return {
-		has: async (key: string): Promise<boolean> => {
-			return await pathExists(getCacheFileName(key))
-		},
+	private getCacheFileName(key: string): string {
+		return join(process.cwd(), "cache", this.identifier, key + ".json")
+	}
 
-		get: async (key: string): Promise<T> => {
-			return await readJSON(getCacheFileName(key), "utf-8")
-		},
-		set: async (key: string, value: T): Promise<T> => {
-			await outputJSON(getCacheFileName(key), value)
-			return value
-		},
+	constructor(identifier: string, got = http) {
+		this.identifier = identifier
+		this.got = got
+	}
+
+	private async has(key: string): Promise<boolean> {
+		return await pathExists(this.getCacheFileName(key))
+	}
+
+	private async get(key: string): Promise<T> {
+		return await readJSON(this.getCacheFileName(key), "utf-8")
+	}
+
+	private async set(key: string, value: T): Promise<T> {
+		await outputJSON(this.getCacheFileName(key), value, {
+			spaces: process.env.FORMAT_CACHE ? "\t" : undefined,
+		})
+		return value
+	}
+
+	async request(options: OptionsOfJSONResponseBody): Promise<T> {
+		const slug = createHash(JSON.stringify(options))
+
+		if (await this.has(slug)) {
+			return await this.get(slug)
+		}
+
+		const response = await this.got<T>(options)
+
+		return await this.set(slug, response.body)
 	}
 }

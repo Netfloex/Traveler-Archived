@@ -3,10 +3,10 @@ import { PlannerLocation, PlannerResponse } from "@breng/types/planner"
 import { GenericSearchResult } from "@breng/types/search"
 import { DateTime } from "luxon"
 
-import { createCacher } from "@utils/createCacher"
+import { Cacher } from "@utils/createCacher"
 import { searchToPlannerLocation } from "@utils/searchToPlannerLocation"
 
-const cache = createCacher<PlannerResponse>("planner")
+const cache = new Cacher<PlannerResponse>("planner", brengApi)
 
 export const planner = async (
 	date: DateTime,
@@ -28,13 +28,7 @@ export const planner = async (
 	const timeString = date.toFormat("T")
 	const dateString = date.toFormat("dd-MM-y")
 
-	const slug = from.description + "-" + to.description
-
-	if (await cache.has(slug)) {
-		return await cache.get(slug)
-	}
-
-	const response = await brengApi.get<PlannerResponse>({
+	return await cache.request({
 		url: "travelplanner/planner",
 		searchParams: {
 			arrive: false,
@@ -44,6 +38,4 @@ export const planner = async (
 			to: JSON.stringify(to),
 		},
 	})
-
-	return await cache.set(slug, response.body)
 }
