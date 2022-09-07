@@ -3,18 +3,18 @@ import { search } from "@breng/search"
 import { HTTPError } from "got-cjs"
 import { DateTime } from "luxon"
 
-import { searchToPlannerLocation } from "@utils/searchToPlannerLocation"
-
 const main = async (): Promise<void> => {
-	const nijmegen = await search("Nijmegen")
-	const diedenweg = await search("Diedenweg")
+	const amsterdam = await search("Amsterdam")
+	const rotterdam = await search("Rotterdam")
 
 	console.log(
-		await planner(
-			DateTime.now(),
-			searchToPlannerLocation(nijmegen.result.transit[0]),
-			searchToPlannerLocation(diedenweg.result.transit[0]),
-		),
+		(
+			await planner(
+				DateTime.now(),
+				amsterdam.result.transit[0],
+				rotterdam.result.transit[0],
+			)
+		).result.result.requestParameters,
 	)
 }
 
