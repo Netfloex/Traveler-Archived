@@ -1,0 +1,16 @@
+/* stylelint-disable selector-id-pattern */
+@use "colors";
+@import "css-variables";
+
+body {
+	margin: 0;
+	background-color: colors.$background;
+	color: colors.$text;
+	font-family: "Work Sans", sans-serif;
+}
+
+html,
+body,
+#__next {
+	height: 100%;
+}

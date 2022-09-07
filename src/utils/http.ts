@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import got, { Response } from "got-cjs"
+import got, { Response } from "got"
 import { HeaderGenerator } from "header-generator"
 
 const generatedHeaders = new HeaderGenerator().getHeaders()

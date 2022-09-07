@@ -1,5 +1,5 @@
 import { outputJSON, pathExists, readJSON } from "fs-extra"
-import { Got, OptionsOfJSONResponseBody } from "got-cjs"
+import { Got, OptionsOfJSONResponseBody } from "got"
 import { join } from "path"
 
 import { createHash } from "@utils/createHash"
