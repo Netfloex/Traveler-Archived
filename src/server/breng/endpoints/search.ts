@@ -1,7 +1,6 @@
 import { brengApi } from "@breng/brengApi"
 import { SearchResponse } from "@breng/types/search"
-
-import { Cacher } from "@lib/Cacher"
+import { Cacher } from "@server/lib/Cacher"
 
 const cache = new Cacher<SearchResponse>("search", brengApi)
 

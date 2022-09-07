@@ -1,4 +1,5 @@
-import chalk from "chalk"
+import colors from "chalk"
+import chalk from "chalk-template"
 import got, { Response } from "got"
 import { HeaderGenerator } from "header-generator"
 
@@ -13,7 +14,7 @@ export const http = got.extend({
 	hooks: {
 		afterResponse: [
 			(response): Response => {
-				const color = response.ok ? chalk.green : chalk.red
+				const color = response.ok ? colors.green : colors.red
 
 				console.log(
 					chalk`${color(response.statusCode)} {yellow ${

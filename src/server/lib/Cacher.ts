@@ -1,9 +1,9 @@
+import { createHash } from "@server/utils/createHash"
+import { http } from "@server/utils/http"
+
 import { outputJSON, pathExists, readJSON } from "fs-extra"
 import { Got, OptionsOfJSONResponseBody } from "got"
 import { join } from "path"
-
-import { createHash } from "@utils/createHash"
-import { http } from "@utils/http"
 
 export class Cacher<T> {
 	identifier: string
