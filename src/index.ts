@@ -1,5 +1,5 @@
-import { planner } from "@breng/planner"
-import { search } from "@breng/search"
+import { planner } from "@breng/endpoints/planner"
+import { search } from "@breng/endpoints/search"
 import chalk from "chalk"
 import { HTTPError } from "got-cjs"
 import { DateTime } from "luxon"
