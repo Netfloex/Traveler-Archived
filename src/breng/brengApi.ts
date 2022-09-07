@@ -1,16 +1,5 @@
-import got, { Response } from "got-cjs"
+import { http } from "@utils/http"
 
-export const brengApi = got.extend({
+export const brengApi = http.extend({
 	prefixUrl: "https://www.breng.nl/api",
-	responseType: "json",
-	hooks: {
-		afterResponse: [
-			(response): Response => {
-				console.log(
-					`${response.statusCode} ${response.request.options.method} ${response.requestUrl}`,
-				)
-				return response
-			},
-		],
-	},
 })

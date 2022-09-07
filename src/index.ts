@@ -24,7 +24,8 @@ main()
 		if (err instanceof HTTPError) {
 			console.error(err)
 
-			console.log(err.message)
+			console.log("Message:", err.message)
+			console.log("Response:", err.response)
 		} else console.error(err)
 	})
 	.then(() => {
