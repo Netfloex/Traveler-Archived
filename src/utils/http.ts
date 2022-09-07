@@ -1,3 +1,4 @@
+import chalk from "chalk"
 import got, { Response } from "got-cjs"
 import { HeaderGenerator } from "header-generator"
 
@@ -12,8 +13,12 @@ export const http = got.extend({
 	hooks: {
 		afterResponse: [
 			(response): Response => {
+				const color = response.ok ? chalk.green : chalk.red
+
 				console.log(
-					`${response.statusCode} ${response.request.options.method} ${response.requestUrl}`,
+					chalk`${color(response.statusCode)} {yellow ${
+						response.request.options.method
+					}} {dim ${response.requestUrl}}`,
 				)
 
 				return response
