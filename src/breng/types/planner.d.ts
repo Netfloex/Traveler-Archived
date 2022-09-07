@@ -104,7 +104,7 @@ interface Leg {
 	duration: number
 	endTime: number
 	fare?: LegFare
-	from: From2
+	from: LegStartOrEndpoint
 	generalizedCost: number
 	interlineWithPreviousLeg?: boolean
 	legGeometry: LegGeometry
@@ -115,7 +115,7 @@ interface Leg {
 	route: string
 	startTime: number
 	steps: Step[]
-	to: To
+	to: LegStartOrEndpoint
 	transitLeg: boolean
 	walkingBike?: boolean
 	agencyId?: string
