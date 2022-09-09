@@ -1,7 +1,9 @@
-import "@styles/globals.scss"
+import Button from "@mui/joy/Button"
+import { CssVarsProvider } from "@mui/joy/styles"
+import { useColorScheme } from "@mui/joy/styles"
+import { FCC } from "@typings/FCC"
 
 import { DefaultSeo } from "next-seo"
-import { ThemeProvider } from "next-themes"
 import type { AppProps } from "next/app"
 import Head from "next/head"
 
@@ -13,9 +15,9 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => (
 		<Head>
 			<link rel="manifest" href="/manifest.json" />
 		</Head>
-		<ThemeProvider defaultTheme="system" attribute="class">
+		<CssVarsProvider defaultMode="system">
 			<Component {...pageProps} />
-		</ThemeProvider>
+		</CssVarsProvider>
 	</>
 )
 
