@@ -3,7 +3,8 @@ ARG NODE_IMAGE=node:16-alpine
 FROM $NODE_IMAGE AS deps
 WORKDIR /app
 
-COPY package.json yarn.lock .yarnrc.yml ./
+COPY package.json yarn.lock ./
+RUN yarn config set network-timeout 600000 -g
 RUN yarn install --frozen-lockfile
 
 FROM $NODE_IMAGE AS builder
