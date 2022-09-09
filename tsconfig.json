@@ -23,7 +23,7 @@
 			"@components": ["src/components"],
 			"@hooks": ["src/server/utils/hooks"],
 
-		"@breng/*": ["src/server/breng/*"],
+			"@breng/*": ["src/server/breng/*"],
 			"@server/*": ["src/server/*"],
 			"@seo-default": ["src/next-seo.config"]
 		},

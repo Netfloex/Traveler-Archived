@@ -4,3 +4,4 @@
 yarn typescript
 yarn lint
 yarn stylelint
+yarn prettier

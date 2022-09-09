@@ -8,9 +8,10 @@
 		"export": "next export",
 		"dev": "next dev",
 		"start": "next start",
-		"stylelint": "stylelint **/*.scss",
+		"stylelint": "echo stylelint **/*.scss # disabled",
 		"typescript": "tsc",
-		"lint": "eslint .",
+		"lint": "eslint . --ext .ts --ext .tsx --ext json",
+		"prettier": "prettier . --check",
 		"prepare": "husky install"
 	},
 	"devDependencies": {
