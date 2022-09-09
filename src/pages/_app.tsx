@@ -1,4 +1,4 @@
-import { CssVarsProvider } from "@mui/joy/styles"
+import { CssVarsProvider, extendTheme } from "@mui/joy/styles"
 
 import { DefaultSeo } from "next-seo"
 import type { AppProps } from "next/app"
@@ -12,7 +12,10 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => (
 		<Head>
 			<link rel="manifest" href="/manifest.json" />
 		</Head>
-		<CssVarsProvider defaultMode="system">
+		<CssVarsProvider
+			defaultMode="system"
+			theme={extendTheme({ cssVarPrefix: "" })}
+		>
 			<Component {...pageProps} />
 		</CssVarsProvider>
 	</>

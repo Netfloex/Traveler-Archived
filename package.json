@@ -8,7 +8,7 @@
 		"export": "next export",
 		"dev": "next dev",
 		"start": "next start",
-		"stylelint": "echo stylelint **/*.scss # disabled",
+		"stylelint": "stylelint **/*.scss",
 		"typescript": "tsc",
 		"lint": "eslint . --ext .ts --ext .tsx --ext json",
 		"prettier": "prettier . --check",

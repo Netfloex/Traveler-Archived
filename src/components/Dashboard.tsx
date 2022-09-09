@@ -1,12 +1,10 @@
-import ClearIcon from "@mui/icons-material/Clear"
-import TrainIcon from "@mui/icons-material/Train"
 import Box from "@mui/joy/Box"
 import Card from "@mui/joy/Card"
 import Sheet from "@mui/joy/Sheet"
-import TextField from "@mui/joy/TextField"
 import Typography from "@mui/joy/Typography"
 
 import type { FC } from "react"
+import { LocationTextField } from "src/components/LocationTextField"
 
 export const Dashboard: FC = () => (
 	<>
@@ -18,18 +16,8 @@ export const Dashboard: FC = () => (
 						display: "flex",
 					}}
 				>
-					<TextField
-						label="From"
-						placeholder="Address, station"
-						startDecorator={<TrainIcon fontSize="small" />}
-						endDecorator={<ClearIcon />}
-					/>
-					<TextField
-						label="To"
-						placeholder="Address, station"
-						startDecorator={<TrainIcon fontSize="small" />}
-						endDecorator={<ClearIcon />}
-					/>
+					<LocationTextField label="From" autoFocus />
+					<LocationTextField label="To" />
 				</Box>
 			</Card>
 		</Sheet>
