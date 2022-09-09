@@ -11,7 +11,7 @@ interface SearchLocation {
 export interface GenericSearchResult {
 	name: string
 	location: SearchLocation
-	type: SearchResultType
+	type: TransitSearchResultType | GeneralSearchResultType
 	city?: string
 }
 
@@ -21,9 +21,13 @@ export interface TransitSearchResult extends GenericSearchResult {
 }
 export interface GeneralSearchResult extends GenericSearchResult {
 	detailedType?: string
+	type: GeneralSearchResultType
 }
 
-export type SearchResponse = GeneralResponse<{
-	transit: TransitSearchResult[]
-	general: GeneralSearchResult[]
-}>
+export type SearchResponse = GeneralResponse<
+	| {
+			transit: TransitSearchResult[]
+			general: GeneralSearchResult[]
+	  }
+	| Record<string, never>
+>
