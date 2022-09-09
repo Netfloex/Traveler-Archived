@@ -6,3 +6,4 @@
 !/tsconfig.json
 !/yarn.lock
 !/public/manifest.json
+!/.yarnrc.yml

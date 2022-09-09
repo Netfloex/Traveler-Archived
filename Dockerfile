@@ -3,7 +3,7 @@ ARG NODE_IMAGE=node:16-alpine
 FROM $NODE_IMAGE AS deps
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install --frozen-lockfile
 
 FROM $NODE_IMAGE AS builder
