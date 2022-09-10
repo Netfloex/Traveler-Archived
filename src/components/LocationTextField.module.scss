@@ -1,8 +1,24 @@
+@mixin hide {
+	opacity: 0;
+	visibility: hidden;
+}
+
+@mixin show {
+	opacity: 1;
+	visibility: visible;
+}
+
+@mixin transitionFade {
+	$timing: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+	transition: opacity $timing, visibility $timing;
+}
+
 .input {
 	&:hover,
 	&:focus-within {
 		.clearButtonWrapper {
-			opacity: 1;
+			@include show;
 		}
 	}
 
@@ -11,8 +27,9 @@
 		align-items: center;
 		justify-content: center;
 		cursor: pointer;
-		opacity: 0;
-		transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+		@include hide;
+		@include transitionFade;
 	}
 }
 
@@ -22,23 +39,24 @@
 	.list {
 		position: absolute;
 		width: 100%;
-		opacity: 0;
-		transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+		@include hide;
+		@include transitionFade;
 	}
 }
 
 .inputEmpty {
 	.clearButtonWrapper {
-		opacity: 0 !important;
+		@include hide;
 	}
 
 	.list {
-		opacity: 0 !important;
+		@include hide;
 	}
 }
 
 .focused {
 	.list {
-		opacity: 1;
+		@include show;
 	}
 }
