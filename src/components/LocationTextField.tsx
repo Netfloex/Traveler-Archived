@@ -3,12 +3,11 @@ import {
 	SearchResponse,
 	TransitSearchResult,
 } from "@breng/types/search"
-import ClearIcon from "@mui/icons-material/Clear"
-import TrainIcon from "@mui/icons-material/Train"
 import Box from "@mui/joy/Box"
 import List from "@mui/joy/List"
 import ListItemButton from "@mui/joy/ListItemButton"
 import ListItemDecorator from "@mui/joy/ListItemDecorator"
+import SvgIcon from "@mui/joy/SvgIcon"
 import TextField from "@mui/joy/TextField"
 import Typography from "@mui/joy/Typography"
 
@@ -23,6 +22,7 @@ import {
 	useRef,
 	useState,
 } from "react"
+import { MdClear, MdTrain } from "react-icons/md"
 
 import { TypeToIcon } from "@components"
 
@@ -49,8 +49,8 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 					.then((res) => res.json())
 					.then((data: SearchResponse) => {
 						const autoCompleteList = [
-							...(data.result.transit ?? []),
-							...(data.result.general ?? []),
+							...(data.result?.transit ?? []),
+							...(data.result?.general ?? []),
 						]
 						setAutoComplete(autoCompleteList)
 
@@ -89,7 +89,7 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 			<TextField
 				label={label}
 				placeholder="Address, station"
-				startDecorator={<TrainIcon />}
+				startDecorator={<SvgIcon component={MdTrain}></SvgIcon>}
 				className={styles.input}
 				autoFocus={autoFocus}
 				onBlur={(): void => setFocused(false)}
@@ -101,7 +101,7 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 							setQuery("")
 						}}
 					>
-						<ClearIcon />
+						<SvgIcon component={MdClear}></SvgIcon>
 					</span>
 				}
 				value={query}

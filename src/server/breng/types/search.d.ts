@@ -1,7 +1,28 @@
 import { GeneralResponse } from "@breng/types/general"
 
-type TransitSearchResultType = "busStation" | "railStation" | "onstreetBus"
-type GeneralSearchResultType = "place" | "landuse" | "highway"
+type TransitSearchResultType =
+	| "busStation"
+	| "railStation"
+	| "onstreetBus"
+	| "onstreetTram"
+	| "metroStation"
+	| "ferryPort"
+	| "tramStation"
+	| "combiTramBus"
+type GeneralSearchResultType =
+	| "place"
+	| "landuse"
+	| "highway"
+	| "natural"
+	| "amenity"
+	| "shop"
+	| "building"
+	| "leisure"
+	| "office"
+	| "tourism"
+	| "man_made"
+	| "historic"
+	| "other"
 
 interface SearchLocation {
 	latitude: number
