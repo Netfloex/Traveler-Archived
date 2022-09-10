@@ -41,6 +41,7 @@ export interface TransitSearchResult extends GenericSearchResult {
 	type: TransitSearchResultType
 }
 export interface GeneralSearchResult extends GenericSearchResult {
+	country: string
 	detailedType?: string
 	type: GeneralSearchResultType
 }

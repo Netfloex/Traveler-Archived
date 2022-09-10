@@ -1,6 +1,10 @@
-@mixin hide {
-	opacity: 0;
-	visibility: hidden;
+@function if-important($important) {
+	@return #{if($important, "!important", "")};
+}
+
+@mixin hide($important: false) {
+	opacity: 0 if-important($important);
+	visibility: hidden if-important($important);
 }
 
 @mixin show {
@@ -35,10 +39,12 @@
 
 .wrapper {
 	position: relative;
+	flex: 1;
 
 	.list {
 		position: absolute;
 		width: 100%;
+		box-sizing: border-box;
 
 		@include hide;
 		@include transitionFade;
@@ -47,16 +53,19 @@
 
 .inputEmpty {
 	.clearButtonWrapper {
-		@include hide;
-	}
-
-	.list {
-		@include hide;
+		@include hide(true);
 	}
 }
 
 .focused {
-	.list {
-		@include show;
+	&:not(.autoCompleteEmpty, .inputEmpty) {
+		.list {
+			@include show;
+		}
+
+		:global(.JoyInput-root) {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
 	}
 }
