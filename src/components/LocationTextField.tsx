@@ -14,8 +14,17 @@ import Typography from "@mui/joy/Typography"
 
 import styles from "./LocationTextField.module.scss"
 
-import { FC, useEffect, useState } from "react"
-import { TypeToIcon } from "src/components/TypeToIcon"
+import throttle from "lodash.throttle"
+import {
+	ChangeEventHandler,
+	FC,
+	useCallback,
+	useMemo,
+	useRef,
+	useState,
+} from "react"
+
+import { TypeToIcon } from "@components"
 
 import { cx } from "@utils/cx"
 
@@ -23,30 +32,57 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 	label,
 	autoFocus,
 }) => {
-	const [value, setValue] = useState("")
+	const [query, setQuery] = useState("")
 	const [focused, setFocused] = useState(autoFocus ?? false)
 	const [autoCompleteList, setAutoComplete] = useState<
 		Array<TransitSearchResult | GeneralSearchResult>
 	>([])
 
-	useEffect(() => {
-		if (!value) return setAutoComplete([])
+	const cache = useRef(new Map())
 
-		fetch(`/api/search?q=${value}`)
-			.then((res) => res.json())
-			.then((data: SearchResponse) => {
-				setAutoComplete([
-					...(data.result.transit ?? []),
-					...(data.result.general ?? []),
-				])
-			})
-	}, [value])
+	const updateAutoComplete = useMemo(
+		() =>
+			throttle((searchQuery: string) => {
+				if (!searchQuery) return setAutoComplete([])
+
+				fetch(`/api/search?q=${searchQuery}`)
+					.then((res) => res.json())
+					.then((data: SearchResponse) => {
+						const autoCompleteList = [
+							...(data.result.transit ?? []),
+							...(data.result.general ?? []),
+						]
+						setAutoComplete(autoCompleteList)
+
+						cache.current.set(
+							searchQuery.toLowerCase(),
+							autoCompleteList,
+						)
+					})
+			}, 300),
+		[],
+	)
+
+	const onChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+		(e) => {
+			const value = e.target.value
+			setQuery(value)
+
+			const cacheQuery = value.toLowerCase()
+			if (cache.current.has(cacheQuery)) {
+				return setAutoComplete(cache.current.get(cacheQuery))
+			}
+
+			updateAutoComplete(value)
+		},
+		[updateAutoComplete],
+	)
 
 	return (
 		<Box
 			className={cx(
 				styles.wrapper,
-				!value.length && styles.inputEmpty,
+				!query.length && styles.inputEmpty,
 				focused && styles.focused,
 			)}
 		>
@@ -60,31 +96,32 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 				onFocus={(): void => setFocused(true)}
 				endDecorator={
 					<span
-						className={cx(styles.clearButtonWrapper)}
+						className={styles.clearButtonWrapper}
 						onClick={(): void => {
-							setValue("")
+							setQuery("")
 						}}
 					>
 						<ClearIcon />
 					</span>
 				}
-				value={value}
-				onChange={(e): void => {
-					setValue(e.target.value)
-				}}
+				value={query}
+				onChange={onChange}
 			/>
 			<List className={styles.list}>
 				{autoCompleteList?.map((e, i) => (
 					<ListItemButton
 						variant="solid"
 						key={e.name + ("stopid" in e ? e.stopid : "") + i}
+						onClick={(): void => {
+							setQuery(e.name)
+							setAutoComplete([])
+						}}
 					>
 						<ListItemDecorator>
 							<TypeToIcon type={e.type} />
 						</ListItemDecorator>
 						<div>
 							{e.name}
-
 							<Typography fontSize="xs">{e.city}</Typography>
 						</div>
 					</ListItemButton>
