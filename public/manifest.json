@@ -3,14 +3,14 @@
 	"short_name": "Traveler",
 	"icons": [
 		{
-			"src": "/logo-bg.svg",
+			"src": "/commute.svg",
 			"sizes": "any",
 			"purpose": "maskable",
 			"type": "image/svg+xml"
 		}
 	],
-	"theme_color": "#222",
-	"background_color": "#222",
+	"theme_color": "#121212",
+	"background_color": "#121212",
 	"start_url": "/",
 	"display": "standalone",
 	"orientation": "portrait"
