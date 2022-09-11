@@ -3,7 +3,7 @@
 	"short_name": "Traveler",
 	"icons": [
 		{
-			"src": "/commute.svg",
+			"src": "/commute-bg.svg",
 			"sizes": "any",
 			"purpose": "maskable",
 			"type": "image/svg+xml"
