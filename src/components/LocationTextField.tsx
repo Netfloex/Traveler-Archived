@@ -3,6 +3,7 @@ import {
 	SearchResponse,
 	TransitSearchResult,
 } from "@breng/types/search"
+import { GenericSearchResult } from "@breng/types/search"
 import Box from "@mui/joy/Box"
 import Card from "@mui/joy/Card"
 import CardOverflow from "@mui/joy/CardOverflow"
@@ -19,32 +20,38 @@ import styles from "./LocationTextField.module.scss"
 import throttle from "lodash.throttle"
 import {
 	ChangeEventHandler,
+	Dispatch,
 	FC,
 	MouseEventHandler,
+	MutableRefObject,
+	SetStateAction,
 	useCallback,
 	useMemo,
 	useRef,
 	useState,
 } from "react"
-import { MdClear, MdTrain } from "react-icons/md"
+import { MdClear, MdSearch } from "react-icons/md"
 
 import { TypeToIcon } from "@components"
 
 import { cx } from "@utils/cx"
 
-export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
-	label,
-	autoFocus,
-}) => {
+export const LocationTextField: FC<{
+	label: string
+	autoFocus?: boolean
+	selected: false | GenericSearchResult
+	setSelected: Dispatch<SetStateAction<false | GenericSearchResult>>
+	cache: MutableRefObject<
+		Map<string, Array<TransitSearchResult | GeneralSearchResult>>
+	>
+}> = ({ label, autoFocus, selected, setSelected, cache }) => {
 	const [query, setQuery] = useState("")
 	const [focused, setFocused] = useState(autoFocus ?? false)
 	const [autoCompleteList, setAutoComplete] = useState<
 		Array<TransitSearchResult | GeneralSearchResult>
 	>([])
 
-	const cache = useRef(new Map())
 	const inputRef = useRef<HTMLDivElement>(null)
-
 	const updateAutoComplete = useMemo(
 		() =>
 			throttle((searchQuery: string) => {
@@ -65,7 +72,7 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 						)
 					})
 			}, 300),
-		[],
+		[cache],
 	)
 
 	const onChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
@@ -75,12 +82,13 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 
 			const cacheQuery = value.toLowerCase()
 			if (cache.current.has(cacheQuery)) {
-				return setAutoComplete(cache.current.get(cacheQuery))
+				return setAutoComplete(cache.current.get(cacheQuery)!)
 			}
+			setSelected(false)
 
 			updateAutoComplete(value)
 		},
-		[updateAutoComplete],
+		[updateAutoComplete, cache, setSelected],
 	)
 
 	const onClear = useCallback<
@@ -88,7 +96,19 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 	>((): void => {
 		setQuery("")
 		inputRef.current?.querySelector("input")?.focus()
-	}, [])
+		setSelected(false)
+	}, [setSelected])
+
+	const onSelect = useCallback<
+		(place: GenericSearchResult) => MouseEventHandler<HTMLSpanElement>
+	>(
+		(place) => () => {
+			setQuery(place.name)
+			setAutoComplete([])
+			setSelected(place)
+		},
+		[setSelected],
+	)
 
 	return (
 		<Box
@@ -104,7 +124,13 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 				variant="soft"
 				label={label}
 				placeholder="Address, station"
-				startDecorator={<SvgIcon component={MdTrain}></SvgIcon>}
+				startDecorator={
+					selected ? (
+						<TypeToIcon type={selected.type} />
+					) : (
+						<SvgIcon component={MdSearch} />
+					)
+				}
 				className={styles.input}
 				autoFocus={autoFocus}
 				onBlur={(): void => setFocused(false)}
@@ -115,7 +141,7 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 						className={styles.clearButtonWrapper}
 						onClick={onClear}
 					>
-						<SvgIcon component={MdClear}></SvgIcon>
+						<SvgIcon component={MdClear} />
 					</span>
 				}
 				value={query}
@@ -145,10 +171,7 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 									("stopid" in place ? place.stopid : "") +
 									i
 								}
-								onClick={(): void => {
-									setQuery(place.name)
-									setAutoComplete([])
-								}}
+								onClick={onSelect(place)}
 							>
 								<ListItemDecorator>
 									<TypeToIcon type={place.type} />

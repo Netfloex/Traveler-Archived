@@ -61,7 +61,7 @@ export const TypeToIcon: FC<{
 	type: TransitSearchResultType | GeneralSearchResultType
 }> = ({ type }) => {
 	const icon = typeToIconMap[type]
-	if (icon) return <SvgIcon component={icon}></SvgIcon>
+	if (icon) return <SvgIcon component={icon} />
 	console.log(
 		type + " is not in the list of known types! There is no icon for it",
 	)
