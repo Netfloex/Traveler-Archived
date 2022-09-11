@@ -20,6 +20,7 @@ import throttle from "lodash.throttle"
 import {
 	ChangeEventHandler,
 	FC,
+	MouseEventHandler,
 	useCallback,
 	useMemo,
 	useRef,
@@ -42,6 +43,7 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 	>([])
 
 	const cache = useRef(new Map())
+	const inputRef = useRef<HTMLDivElement>(null)
 
 	const updateAutoComplete = useMemo(
 		() =>
@@ -81,6 +83,13 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 		[updateAutoComplete],
 	)
 
+	const onClear = useCallback<
+		MouseEventHandler<HTMLSpanElement>
+	>((): void => {
+		setQuery("")
+		inputRef.current?.querySelector("input")?.focus()
+	}, [])
+
 	return (
 		<Box
 			className={cx(
@@ -100,12 +109,11 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 				autoFocus={autoFocus}
 				onBlur={(): void => setFocused(false)}
 				onFocus={(): void => setFocused(true)}
+				ref={inputRef}
 				endDecorator={
 					<span
 						className={styles.clearButtonWrapper}
-						onClick={(): void => {
-							setQuery("")
-						}}
+						onClick={onClear}
 					>
 						<SvgIcon component={MdClear}></SvgIcon>
 					</span>
@@ -115,7 +123,6 @@ export const LocationTextField: FC<{ label: string; autoFocus?: boolean }> = ({
 			/>
 			<Card
 				className={styles.list}
-				// sx={{ padding: 0, "& ul": { padding: 0 } }}
 				sx={{
 					"--Card-padding": 0,
 					"--List-item-paddingY": 0,
