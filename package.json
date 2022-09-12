@@ -38,6 +38,7 @@
 		"got": "^12.4.1",
 		"header-generator": "^2.0.9",
 		"husky": "^8.0.1",
+		"ky": "^0.31.3",
 		"lodash.throttle": "^4.1.1",
 		"luxon": "^3.0.3",
 		"next": "^12.2.5",
@@ -52,6 +53,7 @@
 		"stylelint-config-idiomatic-order": "^8.1.0",
 		"stylelint-config-standard-scss": "^5.0.0",
 		"stylelint-scss": "^4.3.0",
-		"typescript": "^4.8.2"
+		"typescript": "^4.8.2",
+		"zod": "^3.19.1"
 	}
 }

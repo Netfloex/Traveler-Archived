@@ -17,6 +17,7 @@
 		"jsx": "preserve",
 		"paths": {
 			"@lib/*": ["src/lib/*"],
+			"@schemas/*": ["src/schemas/*"],
 			"@typings/*": ["src/typings/*"],
 			"@utils/*": ["src/utils/*"],
 			"@styles/*": ["src/styles/*"],

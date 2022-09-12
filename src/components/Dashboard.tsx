@@ -12,7 +12,7 @@ import Typography from "@mui/joy/Typography"
 import { FC, useRef, useState } from "react"
 import { MdArrowForward } from "react-icons/md"
 
-import { LocationTextField } from "@components"
+import { LocationTextField, TravelPlan } from "@components"
 
 export const Dashboard: FC = () => {
 	const [from, setFrom] = useState<GenericSearchResult | false>(false)
@@ -65,6 +65,7 @@ export const Dashboard: FC = () => {
 							{to.name}
 						</Typography>
 					</Box>
+					<TravelPlan from={from} to={to} />
 				</Card>
 			)}
 		</Sheet>

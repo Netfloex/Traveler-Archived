@@ -6,15 +6,23 @@ export interface PlannerLocation {
 	lng: number
 }
 
+interface PlannerResponseResult {
+	elevationMetadata: ElevationMetadata
+	metadata: Metadata
+	plan: Plan
+	requestParameters: RequestParameters
+}
+
+interface PlannerError {
+	id: number
+	message: string
+}
+
 export type PlannerResponse = GeneralResponse<{
 	planner: string
-	// Todo
-	result: {
-		elevationMetadata: ElevationMetadata
-		metadata: Metadata
-		plan: Plan
-		requestParameters: RequestParameters
-	}
+	result:
+		| PlannerResponseResult
+		| (Omit<PlannerResponseResult, "metadata"> & { error: PlannerError })
 }>
 
 interface ElevationMetadata {
