@@ -38,6 +38,7 @@ jobs:
                       type=semver,pattern=v{{major}}.{{minor}}.{{patch}}
                       type=semver,pattern=v{{major}}.{{minor}}
                       type=semver,pattern=v{{major}}
+                      type=raw,value=latest
 
             - name: Build and push to docker hub
               uses: netfloex/actions/docker@master
