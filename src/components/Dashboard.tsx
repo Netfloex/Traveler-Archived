@@ -5,7 +5,6 @@ import {
 } from "@breng/types/search"
 import Box from "@mui/joy/Box"
 import Card from "@mui/joy/Card"
-import Sheet from "@mui/joy/Sheet"
 import SvgIcon from "@mui/joy/SvgIcon"
 import Typography from "@mui/joy/Typography"
 
@@ -23,7 +22,7 @@ export const Dashboard: FC = () => {
 	>(new Map())
 
 	return (
-		<Sheet sx={{ padding: "1rem" }}>
+		<>
 			<Card variant="outlined">
 				<Typography level="h3">Plan your trip</Typography>
 				<Box
@@ -68,6 +67,6 @@ export const Dashboard: FC = () => {
 					<TravelPlan from={from} to={to} />
 				</Card>
 			)}
-		</Sheet>
+		</>
 	)
 }
