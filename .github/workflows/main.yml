@@ -4,6 +4,8 @@ on:
     push:
         branches:
             - main
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
     tests:
@@ -24,10 +26,23 @@ jobs:
     docker:
         runs-on: ubuntu-latest
         needs: tests
+
         steps:
+            - name: Docker meta
+              id: meta
+              uses: docker/metadata-action@v4
+              with:
+                  images: |
+                      netfloex/traveler
+                  tags: |
+                      type=semver,pattern=v{{major}}.{{minor}}.{{patch}}
+                      type=semver,pattern=v{{major}}.{{minor}}
+                      type=semver,pattern=v{{major}}
+
             - name: Build and push to docker hub
               uses: netfloex/actions/docker@master
               with:
                   username: netfloex
                   token: ${{ secrets.DOCKERHUB_TOKEN }}
-                  tags: netfloex/traveler:latest
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
