@@ -22,6 +22,7 @@ import {
 	ChangeEventHandler,
 	Dispatch,
 	FC,
+	FormEventHandler,
 	MouseEventHandler,
 	MutableRefObject,
 	SetStateAction,
@@ -99,15 +100,23 @@ export const LocationTextField: FC<{
 		setSelected(false)
 	}, [setSelected])
 
-	const onSelect = useCallback<
-		(place: GenericSearchResult) => MouseEventHandler<HTMLSpanElement>
-	>(
+	const onSelect = useCallback<(place: GenericSearchResult) => () => void>(
 		(place) => () => {
 			setQuery(place.name)
 			setAutoComplete([])
 			setSelected(place)
 		},
 		[setSelected],
+	)
+
+	const onSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
+		(e) => {
+			e.preventDefault()
+			if (autoCompleteList[0]) {
+				onSelect(autoCompleteList[0])()
+			}
+		},
+		[autoCompleteList, onSelect],
 	)
 
 	return (
@@ -120,33 +129,35 @@ export const LocationTextField: FC<{
 				focused && styles.focused,
 			)}
 		>
-			<TextField
-				variant="soft"
-				label={label}
-				placeholder="Address, station"
-				startDecorator={
-					selected ? (
-						<TypeToIcon type={selected.type} />
-					) : (
-						<SvgIcon component={MdSearch} />
-					)
-				}
-				className={styles.input}
-				autoFocus={autoFocus}
-				onBlur={(): void => setFocused(false)}
-				onFocus={(): void => setFocused(true)}
-				ref={inputRef}
-				endDecorator={
-					<span
-						className={styles.clearButtonWrapper}
-						onClick={onClear}
-					>
-						<SvgIcon component={MdClear} />
-					</span>
-				}
-				value={query}
-				onChange={onChange}
-			/>
+			<form onSubmit={onSubmit}>
+				<TextField
+					variant="soft"
+					label={label}
+					placeholder="Address, station"
+					startDecorator={
+						selected ? (
+							<TypeToIcon type={selected.type} />
+						) : (
+							<SvgIcon component={MdSearch} />
+						)
+					}
+					className={styles.input}
+					autoFocus={autoFocus}
+					onBlur={(): void => setFocused(false)}
+					onFocus={(): void => setFocused(true)}
+					ref={inputRef}
+					endDecorator={
+						<span
+							className={styles.clearButtonWrapper}
+							onClick={onClear}
+						>
+							<SvgIcon component={MdClear} />
+						</span>
+					}
+					value={query}
+					onChange={onChange}
+				/>
+			</form>
 			<Card
 				className={styles.list}
 				sx={{

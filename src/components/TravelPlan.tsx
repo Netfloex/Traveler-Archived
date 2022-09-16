@@ -74,9 +74,9 @@ export const TravelPlan: FC<{
 					</Typography>
 					{itinerary.legs.map((leg) => (
 						<div key={JSON.stringify(leg)}>
-							{formatTime(leg.from.departure)}
-							{"->"}
 							{formatTime(leg.from.arrival)}
+							{"->"}
+							{formatTime(leg.from.departure)}
 							<> </>
 							{leg.mode}
 							<> </>
