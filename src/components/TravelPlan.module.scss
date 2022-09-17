@@ -1,0 +1,19 @@
+.wrapper {
+	display: flex;
+
+	.half {
+		flex: 1;
+	}
+
+	.itinerary {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: unset;
+
+		.topText {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+}

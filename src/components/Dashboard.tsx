@@ -56,7 +56,6 @@ export const Dashboard: FC = () => {
 								display: "flex",
 								justifyItems: "center",
 								alignItems: "center",
-								flexDirection: "row",
 							}}
 						>
 							{from.name}
