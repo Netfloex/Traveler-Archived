@@ -1,5 +1,7 @@
 import { GeneralResponse } from "@breng/types/general"
 
+export type PlannerTravelMode = "WALK" | "BUS" | "RAIL" | "TRAM" | "SUBWAY"
+
 export interface PlannerLocation {
 	description: string
 	lat: number
@@ -116,7 +118,7 @@ interface Leg {
 	generalizedCost: number
 	interlineWithPreviousLeg?: boolean
 	legGeometry: LegGeometry
-	mode: string
+	mode: PlannerTravelMode
 	pathway: boolean
 	realTime: boolean
 	rentedBike?: boolean

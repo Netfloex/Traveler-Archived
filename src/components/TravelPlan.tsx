@@ -16,6 +16,7 @@ import ky from "ky"
 import { DateTime, Duration } from "luxon"
 import { FC, useCallback, useEffect, useState } from "react"
 import { MdArrowForward, MdSchedule } from "react-icons/md"
+import { ModeTypeToIcon } from "src/components/ModeTypeToIcon"
 import { z } from "zod"
 
 import { searchToPlannerLocation } from "@utils/searchToPlannerLocation"
@@ -108,7 +109,10 @@ export const TravelPlan: FC<{
 								</div>
 								<Typography level="body2">
 									{itinerary.legs.map((leg) => (
-										<>{leg.mode} + </>
+										<ModeTypeToIcon
+											key={JSON.stringify(leg)}
+											type={leg.mode}
+										/>
 									))}
 								</Typography>
 							</Box>
@@ -120,8 +124,9 @@ export const TravelPlan: FC<{
 						className={styles.half}
 						value={i}
 						key={JSON.stringify(itinerary)}
+						sx={{ padding: 0 }}
 					>
-						<Card variant="soft">
+						<Card variant="soft" sx={{ "--Card-padding": "1rem" }}>
 							{itinerary.legs.map((leg) => (
 								<div key={JSON.stringify(leg)}>
 									<Typography
@@ -145,7 +150,7 @@ export const TravelPlan: FC<{
 										}}
 									>
 										<> </>
-										{leg.mode}
+										<ModeTypeToIcon type={leg.mode} />
 										<> </>
 
 										{leg.from.name}
