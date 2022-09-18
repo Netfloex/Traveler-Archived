@@ -1,0 +1,21 @@
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	.locationSearch {
+		display: flex;
+		gap: 1rem;
+
+		.textFieldWrapper {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+	}
+}
+
+.textWithIcon {
+	display: flex;
+	align-items: center;
+}

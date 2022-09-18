@@ -3,10 +3,11 @@ import {
 	GenericSearchResult,
 	TransitSearchResult,
 } from "@breng/types/search"
-import Box from "@mui/joy/Box"
 import Card from "@mui/joy/Card"
 import SvgIcon from "@mui/joy/SvgIcon"
 import Typography from "@mui/joy/Typography"
+
+import styles from "./Dashboard.module.scss"
 
 import { FC, useRef, useState } from "react"
 import { MdArrowForward } from "react-icons/md"
@@ -22,16 +23,10 @@ export const Dashboard: FC = () => {
 	>(new Map())
 
 	return (
-		<>
-			<Card variant="outlined">
+		<div className={styles.wrapper}>
+			<Card variant="outlined" className={styles.locationSearch}>
 				<Typography level="h3">Plan your trip</Typography>
-				<Box
-					sx={{
-						display: "flex",
-						flexWrap: "wrap",
-						gap: 6,
-					}}
-				>
+				<div className={styles.textFieldWrapper}>
 					<LocationTextField
 						label="From"
 						autoFocus
@@ -45,27 +40,20 @@ export const Dashboard: FC = () => {
 						setSelected={setTo}
 						cache={cache}
 					/>
-				</Box>
+				</div>
 			</Card>
 			{from && to && (
 				<Card variant="outlined">
-					<Box>
-						<Typography
-							level="h4"
-							sx={{
-								display: "flex",
-								justifyItems: "center",
-								alignItems: "center",
-							}}
-						>
+					<div>
+						<Typography level="h4" className={styles.textWithIcon}>
 							{from.name}
 							<SvgIcon component={MdArrowForward} />
 							{to.name}
 						</Typography>
-					</Box>
+					</div>
 					<TravelPlan from={from} to={to} />
 				</Card>
 			)}
-		</>
+		</div>
 	)
 }

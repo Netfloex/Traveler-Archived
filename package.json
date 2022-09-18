@@ -17,7 +17,7 @@
 	"devDependencies": {
 		"@emotion/react": "^11.10.4",
 		"@emotion/styled": "^11.10.4",
-		"@mui/joy": "^5.0.0-alpha.44",
+		"@mui/joy": "^5.0.0-alpha.45",
 		"@trivago/prettier-plugin-sort-imports": "^3.3.0",
 		"@types/fs-extra": "^9.0.13",
 		"@types/lodash.throttle": "^4.1.7",

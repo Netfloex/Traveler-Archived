@@ -2,6 +2,7 @@ import { PlannerResponse } from "@breng/types/planner"
 import { GenericSearchResult } from "@breng/types/search"
 import Box from "@mui/joy/Box"
 import Card from "@mui/joy/Card"
+import CircularProgress from "@mui/joy/CircularProgress"
 import SvgIcon from "@mui/joy/SvgIcon"
 import Tab from "@mui/joy/Tab"
 import TabList from "@mui/joy/TabList"
@@ -15,7 +16,12 @@ import styles from "./TravelPlan.module.scss"
 import ky from "ky"
 import { DateTime, Duration } from "luxon"
 import { FC, useCallback, useEffect, useState } from "react"
-import { MdArrowForward, MdSchedule } from "react-icons/md"
+import {
+	MdArrowForward,
+	MdChevronRight,
+	MdExploreOff,
+	MdSchedule,
+} from "react-icons/md"
 import { ModeTypeToIcon } from "src/components/ModeTypeToIcon"
 import { z } from "zod"
 
@@ -65,10 +71,22 @@ export const TravelPlan: FC<{
 	}, [from, to])
 
 	if (travelPlan == false) {
-		return <>Loading...</>
+		return (
+			<div className={styles.loadingWrapper}>
+				<CircularProgress />
+			</div>
+		)
 	}
+
 	const { itineraries } = travelPlan.result.result.plan
 
+	if (!itineraries.length) {
+		return (
+			<Typography startDecorator={<SvgIcon component={MdExploreOff} />}>
+				No travel advice found.
+			</Typography>
+		)
+	}
 	return (
 		<>
 			<Tabs
@@ -108,12 +126,39 @@ export const TravelPlan: FC<{
 									</Typography>
 								</div>
 								<Typography level="body2">
-									{itinerary.legs.map((leg) => (
-										<ModeTypeToIcon
-											key={JSON.stringify(leg)}
-											type={leg.mode}
-										/>
-									))}
+									{itinerary.legs.map(
+										(leg, i, { length }) => (
+											<>
+												<Typography
+													startDecorator={
+														<ModeTypeToIcon
+															key={JSON.stringify(
+																leg,
+															)}
+															type={leg.mode}
+														/>
+													}
+													endDecorator={
+														i + 1 !== length ? (
+															<SvgIcon
+																component={
+																	MdChevronRight
+																}
+															/>
+														) : undefined
+													}
+												>
+													{leg.routeShortName ??
+														Duration.fromMillis(
+															leg.duration * 1000,
+														)
+															.as("minutes")
+															.toFixed(0) +
+															" min"}
+												</Typography>
+											</>
+										),
+									)}
 								</Typography>
 							</Box>
 						</Tab>
