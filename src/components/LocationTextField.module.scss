@@ -59,7 +59,7 @@
 }
 
 .focused {
-	&:not(.autoCompleteEmpty, .inputEmpty) {
+	&.autoCompleteListShown {
 		.list {
 			@include show;
 		}
@@ -69,4 +69,11 @@
 			border-bottom-right-radius: 0;
 		}
 	}
+}
+
+.loadingWrapper {
+	display: flex;
+	min-height: 5rem;
+	align-items: center;
+	justify-content: center;
 }

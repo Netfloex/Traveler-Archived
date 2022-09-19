@@ -1,12 +1,14 @@
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles"
 
 import { DefaultSeo } from "next-seo"
-import type { AppProps } from "next/app"
+import { AppType } from "next/dist/shared/lib/utils"
 import Head from "next/head"
+
+import { trpc } from "@utils/trpc"
 
 import SEO from "@seo-default"
 
-const App = ({ Component, pageProps }: AppProps): JSX.Element => (
+const App: AppType = ({ Component, pageProps }) => (
 	<>
 		<DefaultSeo {...SEO} />
 		<Head>
@@ -21,4 +23,4 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => (
 	</>
 )
 
-export default App
+export default trpc.withTRPC(App)

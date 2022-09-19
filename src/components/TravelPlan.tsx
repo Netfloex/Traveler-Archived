@@ -1,4 +1,3 @@
-import { PlannerResponse } from "@breng/types/planner"
 import { GenericSearchResult } from "@breng/types/search"
 import Box from "@mui/joy/Box"
 import Card from "@mui/joy/Card"
@@ -13,9 +12,8 @@ import { plannerBodySchema } from "@schemas/plannerBodySchema"
 
 import styles from "./TravelPlan.module.scss"
 
-import ky from "ky"
 import { DateTime, Duration } from "luxon"
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useMemo } from "react"
 import {
 	MdArrowForward,
 	MdChevronRight,
@@ -25,52 +23,26 @@ import {
 import { ModeTypeToIcon } from "src/components/ModeTypeToIcon"
 import { z } from "zod"
 
+import { formatTime } from "@utils/formatTime"
 import { searchToPlannerLocation } from "@utils/searchToPlannerLocation"
+import { trpc } from "@utils/trpc"
 
 export const TravelPlan: FC<{
 	from: GenericSearchResult
 	to: GenericSearchResult
 }> = ({ from, to }) => {
-	const [travelPlan, updateTravelPlan] = useState<PlannerResponse | false>(
-		false,
-	)
-
-	const formatTime = useCallback(
-		(ms: number | undefined): string =>
-			ms
-				? DateTime.fromMillis(ms).toLocaleString(
-						DateTime.TIME_24_SIMPLE,
-				  )
-				: "~~:~~",
-		[],
-	)
-
-	useEffect(() => {
-		const controller = new AbortController()
-
-		const data: z.input<typeof plannerBodySchema> = {
+	const plannerBody = useMemo<z.input<typeof plannerBodySchema>>(
+		() => ({
 			from: searchToPlannerLocation(from),
 			to: searchToPlannerLocation(to),
 			date: DateTime.now().toMillis(),
-		}
+		}),
+		[from, to],
+	)
 
-		ky.post("/api/planner", {
-			json: data,
-			signal: controller.signal,
-		})
-			.json<PlannerResponse>()
-			.then((data) => {
-				updateTravelPlan(data)
-			})
+	const plannerQuery = trpc.planner.useQuery(plannerBody)
 
-		return () => {
-			console.log("Aborting Request")
-
-			controller.abort()
-		}
-	}, [from, to])
-
-	if (travelPlan == false) {
+	if (plannerQuery.isLoading) {
 		return (
 			<div className={styles.loadingWrapper}>
 				<CircularProgress />
@@ -78,7 +50,11 @@ export const TravelPlan: FC<{
 		)
 	}
 
-	const { itineraries } = travelPlan.result.result.plan
+	if (plannerQuery.error) {
+		return <>Error</>
+	}
+
+	const { itineraries } = plannerQuery.data.result.result.plan
 
 	if (!itineraries.length) {
 		return (
@@ -87,6 +63,7 @@ export const TravelPlan: FC<{
 			</Typography>
 		)
 	}
+
 	return (
 		<>
 			<Tabs
