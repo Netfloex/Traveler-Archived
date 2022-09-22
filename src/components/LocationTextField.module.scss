@@ -44,8 +44,14 @@
 	.list {
 		position: absolute;
 		z-index: 10;
+		overflow: hidden;
 		width: 100%;
 		box-sizing: border-box;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+
+		--Card-padding: 0;
+		--List-item-paddingY: 0;
 
 		@include hide;
 		@include transitionFade;

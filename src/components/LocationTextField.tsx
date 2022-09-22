@@ -130,38 +130,26 @@ export const LocationTextField: FC<{
 					onChange={onChange}
 				/>
 			</form>
-			<Card
-				className={styles.list}
-				sx={{
-					"--Card-padding": 0,
-					"--List-item-paddingY": 0,
-					overflow: "hidden",
-					borderTopLeftRadius: 0,
-					borderTopRightRadius: 0,
-				}}
-			>
-				<CardOverflow>
-					<List
-						sx={{
-							"--List-divider-gap": 0,
-						}}
-					>
-						{searchQuery.isLoading ? (
-							<Card
-								variant="soft"
-								className={styles.loadingWrapper}
-							>
-								<CircularProgress
-									variant="soft"
-									color="neutral"
-								/>
-							</Card>
-						) : searchQuery.isError ? (
-							<Alert color="danger">
-								Error: {searchQuery.error.message}
-							</Alert>
-						) : (
-							searchQuery.data.map((place, i) => (
+			{searchQuery.isLoading ? (
+				// <Card className={styles.loadingWrapper}>
+				<Card
+					className={styles.list + " " + styles.loadingWrapper}
+					variant="soft"
+				>
+					<CircularProgress variant="soft" color="neutral" />{" "}
+				</Card>
+			) : // </Card>
+			searchQuery.isError ? (
+				<Alert color="danger">Error: {searchQuery.error.message}</Alert>
+			) : (
+				<Card className={styles.list}>
+					<CardOverflow>
+						<List
+							sx={{
+								"--List-divider-gap": 0,
+							}}
+						>
+							{searchQuery.data.map((place, i) => (
 								<ListItemButton
 									variant="soft"
 									key={
@@ -190,11 +178,11 @@ export const LocationTextField: FC<{
 										</Typography>
 									</ListItemContent>
 								</ListItemButton>
-							))
-						)}
-					</List>
-				</CardOverflow>
-			</Card>
+							))}
+						</List>
+					</CardOverflow>
+				</Card>
+			)}
 		</Box>
 	)
 }
